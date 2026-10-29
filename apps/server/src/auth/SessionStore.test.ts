@@ -486,4 +486,22 @@ it.layer(NodeServices.layer)("SessionStore.layer", (it) => {
       }
     }).pipe(Effect.provide(layerSessionStore())),
   );
+
+  it.effect("lists sessions issued to TV clients", () =>
+    Effect.gen(function* () {
+      const sessions = yield* SessionStore.SessionStore;
+      const issued = yield* sessions.issue({
+        subject: "one-time-token",
+        scopes: ["orchestration:read"],
+        client: { label: "Living room TV", deviceType: "tv", os: "tvOS" },
+      });
+
+      const active = yield* sessions.listActive();
+
+      expect(active.find((entry) => entry.sessionId === issued.sessionId)?.client).toMatchObject({
+        label: "Living room TV",
+        deviceType: "tv",
+      });
+    }).pipe(Effect.provide(layerSessionStore())),
+  );
 });

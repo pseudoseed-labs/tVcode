@@ -34,6 +34,7 @@ import {
   ChatGptHandoffState,
 } from "./providerSetup.ts";
 import * as Schema from "effect/Schema";
+import { TvDoorbellError, TvDoorbellStatus } from "./tvDoorbell.ts";
 import * as Rpc from "effect/rpc/Rpc";
 import * as RpcGroup from "effect/rpc/RpcGroup";
 import * as RpcMiddleware from "effect/rpc/RpcMiddleware";
@@ -597,6 +598,9 @@ export const WS_METHODS = {
   subscribeServerLifecycle: "subscribeServerLifecycle",
   subscribeAuthAccess: "subscribeAuthAccess",
   subscribeResourceTelemetry: "subscribeResourceTelemetry",
+  tvDoorbellSubscribeStatus: "tvDoorbell.subscribeStatus",
+  tvDoorbellTestRing: "tvDoorbell.testRing",
+  tvDoorbellResetPairing: "tvDoorbell.resetPairing",
 } as const;
 
 const WsServerUpsertKeybindingRpc = Rpc.make(WS_METHODS.serverUpsertKeybinding, {
@@ -1918,6 +1922,30 @@ const WsSubscribeResourceTelemetryRpc = Rpc.make(WS_METHODS.subscribeResourceTel
   stream: true,
 });
 
+const WsTvDoorbellSubscribeStatusRpc = Rpc.make(WS_METHODS.tvDoorbellSubscribeStatus, {
+  payload: Schema.Struct({}),
+  success: TvDoorbellStatus,
+  error: EnvironmentAuthorizationError,
+  stream: true,
+});
+
+const WsTvDoorbellTestRingRpc = Rpc.make(WS_METHODS.tvDoorbellTestRing, {
+  payload: Schema.Struct({}),
+  success: TvDoorbellStatus,
+  error: Schema.Union([EnvironmentAuthorizationError, TvDoorbellError]),
+});
+
+const WsTvDoorbellResetPairingRpc = Rpc.make(WS_METHODS.tvDoorbellResetPairing, {
+  payload: Schema.Struct({}),
+  success: TvDoorbellStatus,
+  error: Schema.Union([EnvironmentAuthorizationError, TvDoorbellError]),
+});
+
+/**
+ * Checks the connection's scopes against the scope each RPC declares, before
+ * the handler runs. Every RPC in `WsRpcGroup` carries it, so a handler cannot
+ * be added without authorization.
+ */
 export class RpcScopeAuthorization extends RpcMiddleware.Service<RpcScopeAuthorization>()(
   "t3/contracts/RpcScopeAuthorization",
   { error: EnvironmentAuthorizationError },
@@ -2109,6 +2137,9 @@ export const WsRpcGroup = RpcGroup.make(
   WsSubscribeServerLifecycleRpc,
   WsSubscribeAuthAccessRpc,
   WsSubscribeResourceTelemetryRpc,
+  WsTvDoorbellSubscribeStatusRpc,
+  WsTvDoorbellTestRingRpc,
+  WsTvDoorbellResetPairingRpc,
   WsOrchestrationV2DispatchCommandRpc,
   WsOrchestrationV2GetWorkflowScriptRpc,
   WsOrchestrationV2StopWorkflowRpc,

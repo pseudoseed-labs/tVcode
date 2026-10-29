@@ -10,6 +10,9 @@ const CLI_RUNTIME_EXTERNAL_PREFIXES = [
   "@yuuang/",
   "@ff-labs/",
   "@napi-rs/keyring",
+  // The TV doorbell's render worker loads these by resolved path, and resvg reads its .wasm file.
+  "@resvg/resvg-wasm",
+  "jpeg-js",
   "@clerk/electron-passkeys",
   "node-gyp-build",
   "node-addon-api",

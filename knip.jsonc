@@ -61,7 +61,14 @@
       // The Vite+ web build prerequisite.
       // Native and disk-loaded provider packages stay external to the bundle; the
       // CLI archive and desktop sidecar stage them from this manifest.
-      "ignoreDependencies": ["@effect/platform-node-shared", "@t3tools/web", "@napi-rs/keyring"],
+      // The TV doorbell's render worker loads resvg-wasm and jpeg-js by resolved path.
+      "ignoreDependencies": [
+        "@effect/platform-node-shared",
+        "@t3tools/web",
+        "@napi-rs/keyring",
+        "@resvg/resvg-wasm",
+        "jpeg-js",
+      ],
     },
     "apps/desktop": {
       // Electron loads these bundles by filename rather than importing them.

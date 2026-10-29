@@ -340,6 +340,11 @@ overrides:
   yaml: "catalog:"
 
 packageExtensions:
+  # Our patch makes hap-nodejs fall back to @noble/ciphers where Node lacks
+  # chacha20-poly1305, as in Electron (BoringSSL), which runs the desktop server.
+  "hap-nodejs@*":
+    dependencies:
+      "@noble/ciphers": 2.4.0
   "@clerk/expo@*":
     dependencies:
       "@expo/config-plugins": 58.0.9
@@ -394,6 +399,7 @@ patchedDependencies:
   # Observe the owned host exit independently of descendants retaining its stdio.
   "@muse-code/sdk@1.4.6": patches/@muse-code__sdk@1.4.6.patch
   app-builder-lib@26.16.1: patches/app-builder-lib@26.16.1.patch
+  hap-nodejs@0.14.3: patches/hap-nodejs@0.14.3.patch
 
 peerDependencyRules:
   allowAny:

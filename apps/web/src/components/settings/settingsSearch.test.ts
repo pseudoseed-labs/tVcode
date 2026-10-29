@@ -14,7 +14,9 @@ import {
   isSettingsSearchScopeAvailable,
   movedSettingsPath,
   searchSettings,
+  SETTINGS_NAV_GROUPS,
   SETTINGS_SEARCH_ITEMS,
+  SETTINGS_SECTION_LABELS,
   sourceControlHostSearchItems,
   sourceControlHostSettingsSearchId,
   type SettingsSearchItem,
@@ -327,5 +329,13 @@ describe("movedSettingsPath", () => {
     expect(movedSettingsPath("/settings/projects", "project-defaults")).toBeNull();
     expect(movedSettingsPath("/settings/connections", "remote-environments")).toBeNull();
     expect(movedSettingsPath("/settings/appearance", "theme")).toBeNull();
+  });
+});
+
+describe("settings navigation", () => {
+  it("lists every settings page except diagnostics, which opens from Maintenance", () => {
+    const listed = new Set<string>(SETTINGS_NAV_GROUPS.flatMap((group) => group.paths));
+    const unlisted = Object.keys(SETTINGS_SECTION_LABELS).filter((path) => !listed.has(path));
+    expect(unlisted).toEqual(["/settings/diagnostics"]);
   });
 });

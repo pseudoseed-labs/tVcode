@@ -10,6 +10,7 @@ import {
 import {
   ArchiveIcon,
   FlaskConicalIcon,
+  TvIcon,
   BotIcon,
   createLucideIcon,
   CalendarClockIcon,
@@ -103,6 +104,7 @@ const SETTINGS_SECTION_ICONS: Readonly<
   "/settings/connections": ServerIcon,
   "/settings/access": ShieldCheckIcon,
   "/settings/maintenance": WrenchIcon,
+  "/settings/tv": TvIcon,
   "/settings/labs": FlaskConicalIcon,
   "/settings/about": InfoIcon,
   "/settings/archived": ArchiveIcon,

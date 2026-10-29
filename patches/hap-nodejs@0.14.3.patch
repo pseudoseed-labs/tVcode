@@ -1,0 +1,42 @@
+diff --git a/dist/lib/util/hapCrypto.js b/dist/lib/util/hapCrypto.js
+index b597efb2d0f82f6407f570bf8092443d4466c1be..d7b1264e225c019b1199c840f4da73f89ecb9097 100644
+--- a/dist/lib/util/hapCrypto.js
++++ b/dist/lib/util/hapCrypto.js
+@@ -13,10 +13,9 @@ var assert_1 = tslib_1.__importDefault(require("assert"));
+ var crypto_1 = tslib_1.__importDefault(require("crypto"));
+ var futoin_hkdf_1 = tslib_1.__importDefault(require("futoin-hkdf"));
+ var tweetnacl_1 = tslib_1.__importDefault(require("tweetnacl"));
+-if (!crypto_1.default.getCiphers().includes("chacha20-poly1305")) {
+-    assert_1.default.fail("The cipher 'chacha20-poly1305' is not supported with your current running nodejs version v" + process.version + ". " +
+-        "At least a nodejs version of v10.17.0 (excluding v11.0 and v11.1) is required!");
+-}
++// Electron's BoringSSL lacks chacha20-poly1305, so fall back to @noble/ciphers there.
++var nativeChaCha = crypto_1.default.getCiphers().includes("chacha20-poly1305");
++var nobleChaCha = nativeChaCha ? undefined : require("@noble/ciphers/chacha.js").chacha20poly1305;
+ /**
+  * @group Cryptography
+  */
+@@ -68,6 +67,9 @@ function chacha20_poly1305_decryptAndVerify(key, nonce, aad, ciphertext, authTag
+             nonce,
+         ]);
+     }
++    if (!nativeChaCha) {
++        return Buffer.from(nobleChaCha(key, nonce, aad || undefined).decrypt(Buffer.concat([ciphertext, authTag])));
++    }
+     var decipher = crypto_1.default.createDecipheriv("chacha20-poly1305", key, nonce, { authTagLength: 16 });
+     if (aad) {
+         decipher.setAAD(aad, { plaintextLength: ciphertext.length });
+@@ -87,6 +89,13 @@ function chacha20_poly1305_encryptAndSeal(key, nonce, aad, plaintext) {
+             nonce,
+         ]);
+     }
++    if (!nativeChaCha) {
++        var sealed = Buffer.from(nobleChaCha(key, nonce, aad || undefined).encrypt(plaintext));
++        return {
++            ciphertext: sealed.subarray(0, sealed.length - 16),
++            authTag: sealed.subarray(sealed.length - 16),
++        };
++    }
+     var cipher = crypto_1.default.createCipheriv("chacha20-poly1305", key, nonce, { authTagLength: 16 });
+     if (aad) {
+         cipher.setAAD(aad, { plaintextLength: plaintext.length });

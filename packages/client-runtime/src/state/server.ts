@@ -1298,6 +1298,11 @@ export function createServerEnvironmentAtoms<R, E>(
       tag: WS_METHODS.subscribeResourceTelemetry,
       idleTtlMs: 0,
     }),
+    tvDoorbellStatus: createEnvironmentRpcSubscriptionAtomFamily(runtime, {
+      label: "environment-data:server:tv-doorbell-status",
+      tag: WS_METHODS.tvDoorbellSubscribeStatus,
+      idleTtlMs: 0,
+    }),
     resourceTelemetryHistory: createEnvironmentRpcQueryAtomFamily(runtime, {
       label: "environment-data:server:resource-telemetry-history",
       tag: WS_METHODS.serverGetResourceTelemetryHistory,
@@ -1538,6 +1543,16 @@ export function createServerEnvironmentAtoms<R, E>(
     checkOtlpEndpoint: createEnvironmentRpcCommand(runtime, {
       label: "environment-data:server:check-otlp-endpoint",
       tag: WS_METHODS.serverCheckOtlpEndpoint,
+    }),
+    tvDoorbellTestRing: createEnvironmentRpcCommand(runtime, {
+      label: "environment-data:server:tv-doorbell-test-ring",
+      tag: WS_METHODS.tvDoorbellTestRing,
+      concurrency: { mode: "singleFlight", key: ({ environmentId }) => environmentId },
+    }),
+    tvDoorbellResetPairing: createEnvironmentRpcCommand(runtime, {
+      label: "environment-data:server:tv-doorbell-reset-pairing",
+      tag: WS_METHODS.tvDoorbellResetPairing,
+      concurrency: { mode: "singleFlight", key: ({ environmentId }) => environmentId },
     }),
     retryResourceTelemetry: createEnvironmentRpcCommand(runtime, {
       label: "environment-data:server:retry-resource-telemetry",

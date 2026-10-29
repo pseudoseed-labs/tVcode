@@ -124,6 +124,36 @@ describe("remote environment authorization", () => {
     }),
   );
 
+  it.effect(
+    "leaves the tv device type out of the token exchange so released servers accept it",
+    () =>
+      Effect.gen(function* () {
+        const fetch = recordedFetch(
+          Response.json({
+            access_token: "dpop-access-token",
+            issued_token_type: "urn:ietf:params:oauth:token-type:access_token",
+            token_type: "DPoP",
+            expires_in: 3600,
+            scope: "orchestration:read",
+          }),
+        );
+
+        yield* exchangeRemoteDpopAccessToken({
+          httpBaseUrl: "https://remote.example.com/",
+          credential: "one-time-credential",
+          dpopProof: "token-proof",
+          clientMetadata: { label: "T3 Code TV", deviceType: "tv", os: "tvOS" },
+        }).pipe(provideRemoteHttp(fetch.fetchFn));
+
+        expectFetchCall(fetch.calls, 1, {
+          url: "https://remote.example.com/oauth/token",
+          method: "POST",
+          headers: { dpop: "token-proof", "content-type": "application/x-www-form-urlencoded" },
+          body: "grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Atoken-exchange&subject_token=one-time-credential&subject_token_type=urn%3At3%3Aparams%3Aoauth%3Atoken-type%3Aenvironment-bootstrap&requested_token_type=urn%3Aietf%3Aparams%3Aoauth%3Atoken-type%3Aaccess_token&client_label=T3+Code+TV&client_os=tvOS",
+        });
+      }),
+  );
+
   it.effect("allows a client to explicitly narrow a pairing grant", () =>
     Effect.gen(function* () {
       const fetch = recordedFetch(

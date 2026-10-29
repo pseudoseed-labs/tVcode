@@ -1,0 +1,42 @@
+{
+  "name": "@t3tools/tv",
+  "version": "0.0.0",
+  "private": true,
+  "main": "index.ts",
+  "scripts": {
+    "dev": "EXPO_TV=1 expo start --dev-client --lan",
+    "prebuild": "EXPO_TV=1 EXPO_NO_GIT_STATUS=1 expo prebuild --clean --platform ios",
+    "tvos": "EXPO_TV=1 EXPO_NO_GIT_STATUS=1 expo prebuild --clean --platform ios && EXPO_TV=1 expo run:ios",
+    "test": "vp test run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@effect/atom-react": "catalog:",
+    "@expo/metro-runtime": "~58.0.14",
+    "@react-native-tvos/config-tv": "0.1.7",
+    "@t3tools/client-runtime": "workspace:*",
+    "@t3tools/contracts": "workspace:*",
+    "@t3tools/shared": "workspace:*",
+    "effect": "catalog:",
+    "expo": "58.0.14",
+    "expo-constants": "~58.0.12",
+    "expo-crypto": "~58.0.7",
+    "expo-secure-store": "~58.0.2",
+    "react": "catalog:",
+    "react-native": "npm:react-native-tvos@0.88.0-0"
+  },
+  "devDependencies": {
+    "@effect/vitest": "catalog:",
+    "@types/react": "catalog:",
+    "babel-preset-expo": "~58.0.17",
+    "typescript": "catalog:"
+  },
+  "expo": {
+    "install": {
+      "exclude": [
+        "react-native",
+        "typescript"
+      ]
+    }
+  }
+}

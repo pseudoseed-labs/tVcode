@@ -868,6 +868,21 @@
       "name": "iobuffer",
       "license": "MIT",
       "sourceUrl": "https://github.com/image-js/iobuffer"
+    },
+    {
+      "name": "@resvg/resvg-wasm",
+      "version": "2.6.2",
+      "sourceUrl": "https://github.com/yisibl/resvg-js",
+      "generatedNotice": { "licenseId": "MPL-2.0" }
+    },
+    {
+      "name": "node-persist",
+      "version": "0.0.12",
+      "sourceUrl": "https://github.com/simonlast/node-persist",
+      "generatedNotice": {
+        "licenseId": "MIT",
+        "copyrights": ["Copyright (c) 2018 Simon Last"]
+      }
     }
   ]
 }

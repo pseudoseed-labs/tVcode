@@ -1217,6 +1217,11 @@ export const ServerSettings = Schema.Struct({
    * and tasks on another machine; tasks already running there finish.
    */
   linkedEnvironmentsEnabled: Schema.Boolean.pipe(Schema.withDecodingDefault(Effect.succeed(false))),
+  /** TV: a HomeKit doorbell that rings Apple TV when a thread needs you, finishes, or fails. */
+  tvDoorbellEnabled: Schema.Boolean.pipe(Schema.withDecodingDefault(Effect.succeed(false))),
+  tvDoorbellRingOnNeedsYou: Schema.Boolean.pipe(Schema.withDecodingDefault(Effect.succeed(true))),
+  tvDoorbellRingOnCompleted: Schema.Boolean.pipe(Schema.withDecodingDefault(Effect.succeed(true))),
+  tvDoorbellRingOnFailed: Schema.Boolean.pipe(Schema.withDecodingDefault(Effect.succeed(true))),
   sidebarAutoSettleKeepPullRequests: Schema.Boolean.pipe(
     Schema.withDecodingDefault(Effect.succeed(false)),
   ),
@@ -1566,6 +1571,10 @@ export const ServerSettingsPatch = Schema.Struct({
   snoozePresets: Schema.optionalKey(SnoozePresetSettings),
   guestSharingEnabled: Schema.optionalKey(Schema.Boolean),
   linkedEnvironmentsEnabled: Schema.optionalKey(Schema.Boolean),
+  tvDoorbellEnabled: Schema.optionalKey(Schema.Boolean),
+  tvDoorbellRingOnNeedsYou: Schema.optionalKey(Schema.Boolean),
+  tvDoorbellRingOnCompleted: Schema.optionalKey(Schema.Boolean),
+  tvDoorbellRingOnFailed: Schema.optionalKey(Schema.Boolean),
   backgroundActivity: Schema.optionalKey(
     Schema.Struct({
       schemaVersion: Schema.optionalKey(Schema.Literal(1)),

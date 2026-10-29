@@ -32,7 +32,10 @@ const clientMetadataTokenExchangeFields = (
   const displayOs = clientMetadata?.os;
   return {
     ...(clientMetadata?.label ? { client_label: clientMetadata.label } : {}),
-    ...(clientMetadata?.deviceType ? { client_device_type: clientMetadata.deviceType } : {}),
+    // Servers released before "tv" reject the whole token exchange (400) on an unknown device type.
+    ...(clientMetadata?.deviceType && clientMetadata.deviceType !== "tv"
+      ? { client_device_type: clientMetadata.deviceType }
+      : {}),
     ...(displayOs && displayOs !== "unknown" && displayOs !== "other"
       ? { client_os: displayOs }
       : {}),

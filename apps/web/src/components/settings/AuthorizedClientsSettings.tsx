@@ -8,6 +8,7 @@ import {
   AuthFilesystemReadScope,
   AuthStandardClientScopes,
   AuthTerminalReadScope,
+  type AuthClientMetadataDeviceType,
   type AuthEnvironmentScope,
   type AuthGrantScope,
   type AuthPairingCredentialResult,
@@ -109,6 +110,15 @@ function AccessScopeSummary({
     </Popover>
   );
 }
+
+const DEVICE_TYPE_LABEL: Record<AuthClientMetadataDeviceType, string | null> = {
+  desktop: "Desktop",
+  mobile: "Mobile",
+  tablet: "Tablet",
+  tv: "TV",
+  bot: "Bot",
+  unknown: null,
+};
 
 function endpointRowClassName(isAvailable: boolean) {
   return cn(
@@ -505,9 +515,7 @@ const ConnectedClientListRow = memo(function ConnectedClientListRow({
       ? `Last connected at ${formatAccessTimestamp(lastConnectedAt)}`
       : "Not connected yet.";
   const deviceInfoBits = [
-    clientSession.client.deviceType !== "unknown"
-      ? clientSession.client.deviceType[0]?.toUpperCase() + clientSession.client.deviceType.slice(1)
-      : null,
+    DEVICE_TYPE_LABEL[clientSession.client.deviceType],
     clientSession.client.os ?? null,
     clientSession.client.browser ?? null,
     clientSession.client.ipAddress ?? null,

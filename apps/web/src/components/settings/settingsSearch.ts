@@ -34,6 +34,7 @@ export type SettingsPath =
   | "/settings/connections"
   | "/settings/access"
   | "/settings/maintenance"
+  | "/settings/tv"
   | "/settings/labs"
   | "/settings/about"
   | "/settings/archived";
@@ -102,6 +103,7 @@ export const SETTINGS_SECTION_LABELS: Readonly<Record<SettingsPath, string>> = {
   "/settings/connections": "Environments",
   "/settings/access": "Sharing & access",
   "/settings/maintenance": "Maintenance",
+  "/settings/tv": "TV",
   "/settings/labs": "Labs",
   "/settings/about": "About",
   "/settings/archived": "Archive",
@@ -137,7 +139,10 @@ export const SETTINGS_NAV_GROUPS: ReadonlyArray<{
     heading: "Code",
     paths: ["/settings/projects", "/settings/source-control", "/settings/worktrees"],
   },
-  { heading: "Connections", paths: ["/settings/connections", "/settings/access"] },
+  {
+    heading: "Connections",
+    paths: ["/settings/connections", "/settings/access", "/settings/tv"],
+  },
   {
     heading: null,
     paths: ["/settings/maintenance", "/settings/labs", "/settings/about", "/settings/archived"],
@@ -436,6 +441,47 @@ export const SETTINGS_SEARCH_ITEMS = [
     title: "Two-line folder rows",
     to: "/settings/labs",
     searchTerms: ["beta boring sidebar folder rows multiline branch pull request details"],
+  },
+  {
+    id: "tv-doorbell",
+    title: "Apple TV doorbell",
+    to: "/settings/tv",
+    searchTerms: ["apple tv homekit home doorbell picture in picture alert notify television"],
+  },
+  {
+    id: "tv-doorbell-test",
+    title: "Test ring",
+    to: "/settings/tv",
+    searchTerms: ["apple tv homekit doorbell try preview"],
+    secondary: true,
+  },
+  {
+    id: "tv-doorbell-reset",
+    title: "Reset pairing",
+    to: "/settings/tv",
+    searchTerms: ["apple tv homekit doorbell unpair forget setup code"],
+    secondary: true,
+  },
+  {
+    id: "tv-doorbell-needs-you",
+    title: "Ring when a thread needs you",
+    to: "/settings/tv",
+    searchTerms: ["apple tv doorbell approval input waiting"],
+    secondary: true,
+  },
+  {
+    id: "tv-doorbell-completed",
+    title: "Ring when a thread is done",
+    to: "/settings/tv",
+    searchTerms: ["apple tv doorbell finished complete"],
+    secondary: true,
+  },
+  {
+    id: "tv-doorbell-failed",
+    title: "Ring when a thread fails",
+    to: "/settings/tv",
+    searchTerms: ["apple tv doorbell error failure"],
+    secondary: true,
   },
   {
     id: "guest-links",
@@ -1165,6 +1211,7 @@ const SETTINGS_CATEGORY_SCOPES: Readonly<Record<SettingsPath, SettingsSearchScop
   "/settings/access": "connections",
   "/settings/scheduled-tasks": null,
   "/settings/maintenance": null,
+  "/settings/tv": "environment",
   "/settings/labs": null,
   "/settings/about": null,
   "/settings/archived": "project-defaults",
